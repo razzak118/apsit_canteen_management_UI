@@ -1,0 +1,53 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import { useContext } from 'react';
+
+// Components & Pages
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Menu from './pages/Menu';
+import Cart from './pages/Cart';
+
+// A quick wrapper component to protect routes that require authentication
+const ProtectedRoute = ({ children }) => {
+    const { user } = useContext(AuthContext);
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+    return children;
+};
+
+export default function App() {
+    return (
+        <AuthProvider>
+            <Router>
+                <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
+                    <Navbar />
+                    <main className="container mx-auto py-6">
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            
+                            {/* Protected Routes */}
+                            <Route 
+                                path="/" 
+                                element={
+                                    <ProtectedRoute>
+                                        <Menu />
+                                    </ProtectedRoute>
+                                } 
+                            />
+                            <Route 
+                                path="/cart" 
+                                element={
+                                    <ProtectedRoute>
+                                        <Cart />
+                                    </ProtectedRoute>
+                                } 
+                            />
+                        </Routes>
+                    </main>
+                </div>
+            </Router>
+        </AuthProvider>
+    );
+}
