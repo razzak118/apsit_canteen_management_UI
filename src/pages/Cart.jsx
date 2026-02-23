@@ -46,7 +46,7 @@ export default function Cart() {
     const removeItem = async (cartItemId) => {
         try {
             // FIX: Changed to POST and matched backend endpoint exactly
-            await api.post(`/cart/removeItemfromCart/${cartItemId}`);
+            await api.post(`/cart/deleteItemfromCart/${cartItemId}`);
             fetchCart(); // Refresh cart
         } catch (error) {
             console.error("Failed to remove item", error);
