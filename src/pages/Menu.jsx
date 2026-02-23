@@ -40,7 +40,7 @@ export default function Menu() {
             return;
         }
         try {
-            await api.post(`/cart/add/${itemId}`);
+            await api.post(`/cart/addToCart/${itemId}`);
             alert('Added to cart!');
         } catch (error) {
             console.error("Failed to add to cart", error);
@@ -117,7 +117,7 @@ export default function Menu() {
                                     )}
                                     <div className="mt-auto pt-4">
                                         <button 
-                                            onClick={() => addToCart(item.itemIdd)}
+                                            onClick={() => addToCart(item.itemId)}
                                             disabled={!item.available}
                                             className={`w-full py-2.5 rounded-lg font-semibold transition-colors duration-200 ${
                                                 item.available 
