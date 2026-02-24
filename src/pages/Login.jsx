@@ -17,7 +17,7 @@ export default function Login() {
             await login(username, password);
             navigate('/');
         } catch (err) {
-            setError(err.response?.data?.message || 'Invalid username or password. Please try again.');
+            setError('Invalid username or password. Please try again.');
         }
     };
 

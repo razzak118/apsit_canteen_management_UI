@@ -21,6 +21,10 @@ export default function ChangePassword() {
             setError('New passwords do not match.');
             return;
         }
+        if(newPassword==oldPassword){
+            setError('new password is same as previous one!');
+            return;
+        }
 
         try {
             // NOTE: Ensure this matches your backend API endpoint and request body format
