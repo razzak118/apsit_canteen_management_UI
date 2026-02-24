@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Menu from './pages/Menu';
 import Cart from './pages/Cart';
+import ChangePassword from './pages/ChangePassword'; // <-- Import the new page
 
 // A quick wrapper component to protect routes that require authentication
 const ProtectedRoute = ({ children }) => {
@@ -41,6 +42,15 @@ export default function App() {
                                 element={
                                     <ProtectedRoute>
                                         <Cart />
+                                    </ProtectedRoute>
+                                } 
+                            />
+                            {/* New Protected Route for changing password */}
+                            <Route 
+                                path="/change-password" 
+                                element={
+                                    <ProtectedRoute>
+                                        <ChangePassword />
                                     </ProtectedRoute>
                                 } 
                             />
