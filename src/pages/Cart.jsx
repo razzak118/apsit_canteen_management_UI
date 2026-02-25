@@ -30,9 +30,11 @@ export default function Cart() {
             if (change === 1) {
                 // FIX: Matches @PostMapping("/addToCart/{itemId}")
                 await api.post(`/cart/addToCart/${menuItemId}`);
+                window.dispatchEvent(new Event('cartUpdated'));
             } else if (change === -1) {
                 // FIX: Matches @PostMapping("/remove/{itemId}")
                 await api.post(`/cart/remove/${menuItemId}`);
+                window.dispatchEvent(new Event('cartUpdated'));
             }
             fetchCart(); // Refresh cart to get updated totals
         } catch (error) {
@@ -47,6 +49,7 @@ export default function Cart() {
         try {
             // FIX: Changed to POST and matched backend endpoint exactly
             await api.post(`/cart/deleteItemfromCart/${cartItemId}`);
+            window.dispatchEvent(new Event('cartUpdated'));
             fetchCart(); // Refresh cart
         } catch (error) {
             console.error("Failed to remove item", error);
@@ -58,6 +61,7 @@ export default function Cart() {
         try {
             const res = await api.post('/order/place');
             alert(`Order Placed Successfully!`);
+            window.dispatchEvent(new Event('cartUpdated'));
             navigate('/'); 
         } catch (error) {
             alert(error.response?.data?.message || "Failed to place order");

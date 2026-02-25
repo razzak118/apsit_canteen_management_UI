@@ -44,6 +44,7 @@ export default function Menu() {
         }
         try {
             await api.post(`/cart/addToCart/${itemId}`);
+            window.dispatchEvent(new Event('cartUpdated'));
             alert('Added to cart!');
         } catch (error) {
             console.error("Failed to add to cart", error);

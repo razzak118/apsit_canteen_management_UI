@@ -13,6 +13,35 @@ export default function Navbar() {
     const [isDark, setIsDark] = useState(false);
     const dropdownRef = useRef(null);
     const fileInputRef = useRef(null);
+    // Add this near your other states in Navbar.jsx
+    const [cartCount, setCartCount] = useState(0);
+
+    // Add this useEffect to handle fetching and listening for updates
+    useEffect(() => {
+        const fetchCartCount = async () => {
+            if (user) {
+                try {
+                    const res = await api.get('/cart/my-cart');
+                    const items = res.data?.cartItems || [];
+                    // Sum up the quantities of all items in the cart
+                    const totalItems = items.reduce((sum, item) => sum + (item.cartItemQuantity || item.quantity || 1), 0);
+                    setCartCount(totalItems);
+                } catch (error) {
+                    console.error("Failed to fetch cart count", error);
+                }
+            }
+        };
+
+        // Fetch initially on mount
+        fetchCartCount();
+
+        // Listen for our custom update event
+        window.addEventListener('cartUpdated', fetchCartCount);
+
+        return () => {
+            window.removeEventListener('cartUpdated', fetchCartCount);
+        };
+    }, [user]);
 
     useEffect(() => {
         // Check local storage for theme preference
@@ -36,6 +65,7 @@ export default function Navbar() {
     };
 
     const handleLogout = () => {
+        setIsDropdownOpen(false);
         logout();
         navigate('/login');
     };
@@ -121,11 +151,18 @@ export default function Navbar() {
                         {isDark ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
 
-                    <Link to="/cart" className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-mint-600 dark:hover:text-mint-400 transition">
-                        <ShoppingCart size={20} />
-                        <span className="hidden sm:inline">Cart</span>
+                    <Link to="/cart" className="relative flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-mint-600 dark:hover:text-mint-400 transition">
+                        <div className="relative">
+                            <ShoppingCart size={20} />
+                            {/* The red badge */}
+                            {cartCount > 0 && (
+                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border border-white dark:border-slate-800">
+                                    {cartCount > 99 ? '99+' : cartCount}
+                                </span>
+                            )}
+                        </div>
+                        <span className="hidden sm:inline ml-1">Cart</span>
                     </Link>
-
                     <div className="relative" ref={dropdownRef}>
                         <button 
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
