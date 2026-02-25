@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axiosConfig';
 import { Clock, Zap} from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Menu() {
     const [items, setItems] = useState([]);
@@ -45,7 +46,7 @@ export default function Menu() {
         try {
             await api.post(`/cart/addToCart/${itemId}`);
             window.dispatchEvent(new Event('cartUpdated'));
-            alert('Added to cart!');
+            toast.success('Added to cart!');
         } catch (error) {
             console.error("Failed to add to cart", error);
             // Provide a clearer error message based on backend response if available

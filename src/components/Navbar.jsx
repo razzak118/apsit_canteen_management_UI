@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { ShoppingCart, LogOut, Utensils, User, Settings, Moon, Sun, Camera } from 'lucide-react';
 import api from '../api/axiosConfig';
+import toast from 'react-hot-toast'; // <-- 1. Import toast
 
 export default function Navbar() {
     const { user, logout } = useContext(AuthContext);
@@ -127,7 +128,7 @@ export default function Navbar() {
             if (response.data && response.data.profilePictureUrl) {
                 setProfileImage(response.data.profilePictureUrl);
             }
-            alert('Profile picture updated successfully!');
+            toast.success('Profile pic updated !')
             
         } catch (error) {
             console.error("Failed to update profile picture", error);

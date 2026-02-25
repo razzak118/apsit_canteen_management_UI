@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { useContext } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 // Components & Pages
 import Navbar from './components/Navbar';
@@ -23,6 +24,7 @@ export default function App() {
         <AuthProvider>
             <Router>
                 <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
+                    <Toaster position="bottom-right" reverseOrder={false} />
                     <Navbar />
                     <main className="container mx-auto py-6">
                         <Routes>
