@@ -1,7 +1,7 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { ShoppingCart, LogOut, Utensils, User, Settings, Moon, Sun } from 'lucide-react';
+import { ShoppingCart, LogOut, Utensils, User, Settings, Moon, Sun, Camera } from 'lucide-react';
 import api from '../api/axiosConfig';
 
 export default function Navbar() {
@@ -12,6 +12,7 @@ export default function Navbar() {
     const [profileImage, setProfileImage] = useState(null);
     const [isDark, setIsDark] = useState(false);
     const dropdownRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         // Check local storage for theme preference
@@ -71,6 +72,40 @@ export default function Navbar() {
         fetchUserProfile();
     }, [user]);
 
+    // Triggers the hidden file input
+    const triggerFileInput = () => {
+        setIsDropdownOpen(false); // Close the dropdown when clicked
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    // Handles the file after the user selects it
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('profilePicture', file); // Ensure 'image' matches the backend @RequestParam name
+
+        try {
+            const response = await api.post('/users/updateProfilePic', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            
+            // If backend returns the new URL, update the image immediately
+            if (response.data && response.data.profilePictureUrl) {
+                setProfileImage(response.data.profilePictureUrl);
+            }
+            alert('Profile picture updated successfully!');
+            
+        } catch (error) {
+            console.error("Failed to update profile picture", error);
+            alert("Could not update profile picture. Please try again.");
+        } finally {
+            event.target.value = null; // Clear input so the same file can be chosen again
+        }
+    };
     if (!user) return null;
 
     return (
@@ -108,6 +143,14 @@ export default function Navbar() {
 
                         {isDropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-2xl shadow-xl py-1 z-50 border border-slate-100 dark:border-slate-700">
+                                {/* New Update Profile Pic Button */}
+                                <button 
+                                    onClick={triggerFileInput}
+                                    className="flex items-center gap-2 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition w-full text-left text-sm font-medium text-slate-700 dark:text-slate-200"
+                                >
+                                    <Camera size={16} className="text-slate-500 dark:text-slate-400" />
+                                    Update Profile Pic
+                                </button>
                                 <Link 
                                     to="/change-password"
                                     onClick={() => setIsDropdownOpen(false)}
@@ -129,6 +172,13 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                accept="image/*" 
+                className="hidden" 
+            />
         </nav>
     );
 }

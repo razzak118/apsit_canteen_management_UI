@@ -4,7 +4,6 @@ import api from '../api/axiosConfig';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    // Initialize state from localStorage so sessions persist across page reloads
     const [user, setUser] = useState(() => {
         const token = localStorage.getItem('jwt');
         const userId = localStorage.getItem('userId');
@@ -23,6 +22,20 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('userId');
         setUser(null);
     };
+
+    // Listen for the custom unauthorized event from Axios
+    useEffect(() => {
+        const handleUnauthorized = () => {
+            logout(); // This clears state and local storage immediately
+        };
+
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+
+        // Cleanup the listener when the component unmounts
+        return () => {
+            window.removeEventListener('auth:unauthorized', handleUnauthorized);
+        };
+    }, []); // Empty dependency array means this runs once on mount
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>

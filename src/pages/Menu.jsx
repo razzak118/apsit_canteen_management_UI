@@ -8,7 +8,7 @@ export default function Menu() {
     const [selectedCategory, setSelectedCategory] = useState('ALL');
     
     // Make sure these match the exact spelling of your Spring Boot ItemCategory enum
-    const categories = ['ALL', 'SNACK', 'BEVERAGE', 'VEG'];
+    const categories = ['ALL', 'SNACK', 'BEVERAGE', 'VEG', 'INSTANT'];
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -18,7 +18,10 @@ export default function Menu() {
                 if (selectedCategory === 'ALL') {
                     // Adjust this endpoint if your backend uses just '/item' instead of '/item/all'
                     res = await api.get('/item');
-                } else {
+                }else if(selectedCategory==='INSTANT'){
+                    res=await api.get('/item/instant-ready')
+                }
+                else {
                     res = await api.get(`/item/category/${selectedCategory}`);
                 }
                 
