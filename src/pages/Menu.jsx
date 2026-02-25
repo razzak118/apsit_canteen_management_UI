@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axiosConfig';
+import { Clock, Zap} from 'lucide-react';
 
 export default function Menu() {
     const [items, setItems] = useState([]);
@@ -17,7 +18,6 @@ export default function Menu() {
                 if (selectedCategory === 'ALL') {
                     // Adjust this endpoint if your backend uses just '/item' instead of '/item/all'
                     res = await api.get('/item');
-                    console.log(res) 
                 } else {
                     res = await api.get(`/item/category/${selectedCategory}`);
                 }
@@ -60,16 +60,15 @@ export default function Menu() {
                     </div>
                 </div>
 
-                {/* Category Filter Options */}
                 <div className="flex flex-wrap gap-3 mb-8">
                     {categories.map((category) => (
                         <button
                             key={category}
                             onClick={() => setSelectedCategory(category)}
-                            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                            className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                                 selectedCategory === category
-                                    ? 'bg-blue-600 text-white shadow-md'
-                                    : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                                    ? 'bg-mint-600 text-white shadow-md'
+                                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-mint-300 hover:bg-mint-50 dark:hover:bg-slate-700'
                             }`}
                         >
                             {category.replace('_', ' ')}
@@ -91,38 +90,68 @@ export default function Menu() {
                         ) : null}
                         
                         {items.map((item) => (
-                            <div key={item.itemId} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 flex flex-col">
-                                <div className="relative h-48 overflow-hidden bg-gray-100">
+                            <div key={item.itemId} className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-slate-100 dark:border-slate-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 flex flex-col transform hover:-translate-y-1">
+                                <div className="relative h-48 overflow-hidden bg-slate-100 dark:bg-slate-700 m-2 rounded-2xl">
                                     <img 
                                         src={item.imageUrl} 
                                         alt={item.itemName} 
                                         className="w-full h-full object-cover"
-                                        onError={(e) => { 
-                                            e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60'; 
-                                        }} 
+                                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60'; }} 
                                     />
                                     {!item.available && (
-                                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                                            <span className="text-white font-bold px-3 py-1 bg-red-500 rounded-md">Out of Stock</span>
+                                        <div className="absolute inset-0 bg-slate-900/60 flex items-center justify-center backdrop-blur-sm">
+                                            <span className="text-white font-bold px-4 py-2 bg-slate-800/80 rounded-full text-sm">Out of Stock</span>
                                         </div>
                                     )}
                                 </div>
                                 <div className="p-5 flex flex-col flex-grow">
+                                    {/* Title and Price Row */}
                                     <div className="flex justify-between items-start mb-2">
-                                        <h2 className="text-lg font-bold text-gray-900 leading-tight">{item.itemName}</h2>
-                                        <span className="text-lg font-black text-green-600">₹{item.price}</span>
+                                        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight pr-2">
+                                            {item.itemName}
+                                        </h2>
+                                        <span className="text-lg font-black text-mint-600 dark:text-mint-400 shrink-0">
+                                            ₹{item.price}
+                                        </span>
                                     </div>
+
+                                    {/* ✨ UPDATED: Prep Time Badge with "Instant" logic */}
+                                    <div className="flex items-center mb-3">
+                                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700/50 border border-slate-200/60 dark:border-slate-600/50">
+                                            {item.readyIn === 0 || item.readyIn === '0' ? (
+                                                <>
+                                                    <Zap size={14} className="text-accent-500 dark:text-accent-400 fill-accent-500/20" />
+                                                    <span className="text-xs font-bold text-accent-600 dark:text-accent-400 tracking-wide uppercase">
+                                                        Instant
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Clock size={14} className="text-accent-500 dark:text-accent-400" />
+                                                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 tracking-wide">
+                                                        {item.readyIn || 'few'} mins
+                                                    </span>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Description */}
                                     {item.description && (
-                                        <p className="text-gray-500 text-sm mb-4 line-clamp-2">{item.description}</p>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+                                            {item.description}
+                                        </p>
                                     )}
+
+                                    {/* Add to Cart Button */}
                                     <div className="mt-auto pt-4">
                                         <button 
                                             onClick={() => addToCart(item.itemId)}
                                             disabled={!item.available}
-                                            className={`w-full py-2.5 rounded-lg font-semibold transition-colors duration-200 ${
+                                            className={`w-full py-3 rounded-xl font-bold tracking-wide transition-all duration-200 ${
                                                 item.available 
-                                                ? 'bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white' 
-                                                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                ? 'bg-accent-500 text-white hover:bg-accent-600 shadow-[0_4px_14px_0_rgba(249,115,22,0.39)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.23)]' 
+                                                : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed'
                                             }`}
                                         >
                                             {item.available ? 'Add to Cart' : 'Unavailable'}

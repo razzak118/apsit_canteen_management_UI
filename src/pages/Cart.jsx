@@ -92,10 +92,9 @@ export default function Cart() {
                         const currentQty = item.cartItemQuantity || item.quantity || 1;
                         
                         return (
-                            <div key={item.cartItemId} className="flex flex-col sm:flex-row justify-between items-center border-b border-gray-100 py-4 gap-4">
+                            <div key={item.cartItemId} className="flex flex-col sm:flex-row justify-between items-center border-b border-slate-100 dark:border-slate-700 py-6 gap-4">
                                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                                    <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center text-xs font-semibold overflow-hidden">
-                                        {/* Optional: Show image if you map it in dto */}
+                                    <div className="w-20 h-20 bg-mint-50 dark:bg-slate-700 text-mint-500 rounded-2xl flex items-center justify-center text-xs font-semibold overflow-hidden shadow-inner">
                                         {item.menuItem.imageUrl ? (
                                             <img src={item.menuItem.imageUrl} alt="food" className="object-cover w-full h-full" />
                                         ) : (
@@ -103,45 +102,42 @@ export default function Cart() {
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="font-bold text-gray-800 text-lg">
+                                        <h3 className="font-bold text-slate-800 dark:text-slate-100 text-lg">
                                             {item.menuItem?.itemName || 'Unknown Item'}
                                         </h3>
-                                        <span className="text-green-600 font-bold block sm:hidden">
+                                        <span className="text-mint-600 dark:text-mint-400 font-bold block sm:hidden">
                                             ₹{item.cartItemPrice || 0}
                                         </span>
                                     </div>
                                 </div>
                                 
+                                {/* Controls area */}
                                 <div className="flex items-center justify-between w-full sm:w-auto gap-6">
-                                    {/* Quantity Controls */}
-                                    <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                                    <div className="flex items-center bg-slate-50 dark:bg-slate-900 rounded-xl p-1 border border-slate-100 dark:border-slate-700">
                                         <button 
-                                            // FIX: Passed item.menuItem.itemId instead of item.cartItemId
                                             onClick={() => updateQuantity(item.menuItem.itemId, -1)}
-                                            className="w-8 h-8 flex items-center justify-center bg-white rounded-md shadow-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition"
+                                            className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm text-slate-600 dark:text-slate-300 hover:text-accent-500 transition"
                                         >
                                             −
                                         </button>
-                                        <span className="w-10 text-center font-semibold text-gray-800">
+                                        <span className="w-12 text-center font-bold text-slate-800 dark:text-slate-100">
                                             {currentQty}
                                         </span>
                                         <button 
-                                            // FIX: Passed item.menuItem.itemId instead of item.cartItemId
                                             onClick={() => updateQuantity(item.menuItem.itemId, 1)}
-                                            className="w-8 h-8 flex items-center justify-center bg-white rounded-md shadow-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition"
+                                            className="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-800 rounded-lg shadow-sm text-slate-600 dark:text-slate-300 hover:text-accent-500 transition"
                                         >
                                             +
                                         </button>
                                     </div>
                                     
                                     <div className="text-right flex items-center gap-4">
-                                        <span className="font-bold text-green-600 hidden sm:block text-lg">
+                                        <span className="font-black text-mint-600 dark:text-mint-400 hidden sm:block text-xl">
                                             ₹{item.cartItemPrice || 0}
                                         </span>
                                         <button 
                                             onClick={() => removeItem(item.cartItemId)}
-                                            className="text-red-400 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition"
-                                            title="Remove item"
+                                            className="text-slate-400 hover:text-red-500 p-2 rounded-full hover:bg-red-50 dark:hover:bg-slate-700 transition"
                                         >
                                             ✕
                                         </button>
@@ -151,14 +147,14 @@ export default function Cart() {
                         );
                     })}
                     
-                    <div className="flex justify-between items-center mt-8 pt-4 border-t-2 border-dashed border-gray-200 text-xl">
-                        <span className="font-extrabold text-gray-800">Total Amount:</span>
-                        <span className="font-black text-green-600 text-2xl">₹{cart.totalCartPrice || 0}</span>
+                    <div className="flex justify-between items-center mt-8 pt-6 border-t-2 border-dashed border-slate-200 dark:border-slate-700 text-xl">
+                        <span className="font-extrabold text-slate-800 dark:text-slate-200">Total Amount:</span>
+                        <span className="font-black text-mint-600 dark:text-mint-400 text-3xl">₹{cart.totalCartPrice || 0}</span>
                     </div>
                     
                     <button 
                         onClick={placeOrder}
-                        className="w-full mt-8 bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+                        className="w-full mt-8 bg-mint-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-mint-700 hover:shadow-xl transition-all duration-200 transform hover:-translate-y-1"
                     >
                         Place Order (Pay at Counter)
                     </button>

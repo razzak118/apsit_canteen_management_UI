@@ -22,14 +22,14 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-                <div className="flex flex-col items-center mb-8">
-                    <div className="bg-blue-100 p-3 rounded-full mb-3 text-blue-600">
-                        <Utensils size={32} />
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4 transition-colors duration-300">
+            <div className="max-w-md w-full bg-white dark:bg-slate-800 p-10 rounded-[2rem] shadow-[0_20px_50px_rgb(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgb(0,0,0,0.2)] border border-slate-100 dark:border-slate-700">
+                <div className="flex flex-col items-center mb-10">
+                    <div className="bg-mint-50 dark:bg-slate-700 p-4 rounded-full mb-4 text-mint-500 shadow-sm">
+                        <Utensils size={36} />
                     </div>
-                    <h2 className="text-3xl font-extrabold text-gray-900">APSIT Canteen</h2>
-                    <p className="text-gray-500 mt-2 text-sm">Sign in to order your food</p>
+                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">APSIT Canteen</h2>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm font-medium">Sign in to order your food</p>
                 </div>
                 
                 {error && (
@@ -40,13 +40,13 @@ export default function Login() {
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="username">
+                        <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2" htmlFor="username">
                             Username
                         </label>
                         <input 
                             id="username"
                             type="text" 
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            className="w-full px-5 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-mint-500 focus:border-transparent transition-all dark:text-white"
                             placeholder="Enter your username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -54,7 +54,7 @@ export default function Login() {
                         />
                     </div>
                     <div>
-                        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
+                        <label className="block text-slate-700 dark:text-slate-300 text-sm font-bold mb-2" htmlFor="password">
                             Password
                         </label>
                         <input 
@@ -69,7 +69,7 @@ export default function Login() {
                     </div>
                     <button 
                         type="submit" 
-                        className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition duration-200 mt-4 shadow-md"
+                        className="w-full bg-mint-600 text-white font-bold py-4 px-4 rounded-xl hover:bg-mint-700 focus:ring-4 focus:ring-mint-200 dark:focus:ring-mint-900 transition-all duration-200 mt-8 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                     >
                         Sign In
                     </button>
